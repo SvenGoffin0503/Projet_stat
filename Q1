@@ -65,6 +65,22 @@ figure
 %ou
 
 boxplot(M_red)
+
+Q1_bier=quantile(M(:,1),0.25);
+Q3_bier=quantile(M(:,1),0.75);
+
+Q1_fort=quantile(M(:,2),0.25);
+Q3_fort=quantile(M(:,2),0.75);
+
+Moust_sup_fort = Q3_fort +1.5*(Q3_fort-Q1_fort);
+Moust_inf_fort = 0;
+
+for i = 1:100
+    if(M_red(i, 2) > Moust_sup_fort || M_red(i, 2) < Moust_inf_fort)
+        M_red(i, 2);
+    end
+end
+
 %% (e)
 
 Conso_bier = 0:max(M_red(:,1));
