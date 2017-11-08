@@ -20,7 +20,7 @@ end
 
 E = tirage(n, Data);
 %--------------------------------------------------------------------------
-% (a)i. Moyenne, mediane et ecart-type de l'echantillon (biere et spiritueux)
+%% (a)i. Moyenne, mediane et ecart-type de l'echantillon (biere et spiritueux)
 
 Moy_E_beer = mean(E(:,1));
 Moy_E_spir = mean(E(:,2));
@@ -31,13 +31,15 @@ Med_E_spir = median(E(:,2));
 ET_E_beer = std(E(:,1));
 ET_E_spir = std(E(:,2));
 %--------------------------------------------------------------------------
-% (a)ii. Boites a moustaches (consommation de biere et de spiritueux)
+%% (a)ii. Boites a moustaches (consommation de biere et de spiritueux)
 
 E_red = zeros(n,2);
-E_red(:,1)=E(:,1);
-E_red(:,2)=E(:,2);
+E_red(:,1) = E(:,1);
+E_red(:,2) = E(:,2);
 
 boxplot(E_red);
+%--------------------------------------------------------------------------
+%% (a)iii. Polygones des frequences cumulees de la consommation de biere et de spiritueux
 
 Cons_E_beer = 0:max(Data(:,1));
 Cons_E_spir = 0:max(Data(:,2));
@@ -51,32 +53,34 @@ for i = 1:n
 end
 
 Freq_E_beer = Freq_E_beer / n;
-Freq_E_cum_beer = cumsum(Freq_E_beer);
 Freq_E_spir = Freq_E_spir / n;
+Freq_E_cum_beer = cumsum(Freq_E_beer);
 Freq_E_cum_spir = cumsum(Freq_E_spir);
 
 figure;
 plot(Cons_E_beer, Freq_E_cum_beer);
+title('Polygone des frequences cumulees de la consommation de biere');
+figure;
 plot(Cons_E_spir, Freq_E_cum_spir);
+title('Polygone des frequences cumulees de la consommation de spiritueux');
 
+% Calcul des distances de Kolmogorov Smirnov
 
+Freq_beer = zeros(1, max(Data(:,1)) + 1);
+Freq_spir = zeros(1, max(Data(:,2)) + 1);
 
-
-Freq_bier = zeros(1, max(Data(:,1)) + 1);
-Freq_fort = zeros(1, max(Data(:,2)) + 1);
-
-
-for i=1:100
-    Freq_bier(1, M(i, 1) + 1) = Freq_bier(1, M(i, 1) + 1) + 1;
-    Freq_fort(1, M(i, 2) + 1) = Freq_fort(1, M(i, 2) + 1) + 1;
+for i = 1:N
+    Freq_beer(1, Data(i, 1) + 1) = Freq_beer(1, Data(i, 1) + 1) + 1;
+    Freq_spir(1, Data(i, 2) + 1) = Freq_spir(1, Data(i, 2) + 1) + 1;
 end
 
-Freq_bier = Freq_bier / 100;
-Freq_cum_bier = cumsum(Freq_bier);
-Freq_fort = Freq_fort / 100;
-Freq_cum_fort = cumsum(Freq_fort);
+Freq_beer = Freq_beer / N;
+Freq_spir = Freq_spir / N;
+Freq_cum_bier = cumsum(Freq_beer);
+Freq_cum_fort = cumsum(Freq_spir);
 
-Dist_bier = abs(Freq_cum_bier - Freq_E_cum_beer);
-Dist_fort = abs(Freq_cum_fort - Freq_E_cum_spir);
-Dist_KS_bier = max(Dist_bier)
-Dist_KS_fort = max(Dist_fort)
+Dist_beer = abs(Freq_cum_bier - Freq_E_cum_beer);
+Dist_spir = abs(Freq_cum_fort - Freq_E_cum_spir);
+Dist_KS_beer = max(Dist_beer);
+Dist_KS_spir = max(Dist_spir);
+%--------------------------------------------------------------------------
