@@ -1,36 +1,37 @@
-%% Question 2
-%
-%
-%
-%%
+%==========================================================================
+% Question 2 : Generation d'echantillon i.i.d.
+%   
+%   GOFFIN Sven
+%   CRUTZEN Gilles
+%==========================================================================
+%% Chargement des données
 
-n=20;
+Data = csvread('db_stat75.csv',1,1);
+Size = size(Data);
+N = size(Data(:,1));
+N = N(1);
+n = 20;
 
-
-%% 
-
-M = csvread('db_stat75.csv',1,1);
-siz = size(M);
-
-if(siz(1)~= 100 || siz(2)~= 4)
-    disp('ERREUR DANS LA LECTURE DU FICHIER');
+if(Size(1) ~= 100 || Size(2) ~= 4)
+    disp('ERREUR : LECTURE DU FICHIER ERRONEE');
 end
+%--------------------------------------------------------------------------
+%% (a) Tirage de l'echantillon
 
-%%
+E = tirage(n, Data);
+%--------------------------------------------------------------------------
+% (a)i. Moyenne, mediane et ecart-type de l'echantillon (biere et spiritueux)
 
+Moy_E_beer = mean(E(:,1));
+Moy_E_spir = mean(E(:,2));
 
-E=tirage(n,M);
+Med_E_beer = median(E(:,1));
+Med_E_spir = median(E(:,2));
 
-
-
-Moy_E_bier = mean(E(:,1));
-Moy_E_fort = mean(E(:,2));
-
-Med_E_bier = median(E(:,1));
-Med_E_fort = median(E(:,2));
-
-ET_E_bier = std(E(:,1));
-ET_E_fort = std(E(:,2));
+ET_E_beer = std(E(:,1));
+ET_E_spir = std(E(:,2));
+%--------------------------------------------------------------------------
+% (a)ii. Boites a moustaches (consommation de biere et de spiritueux)
 
 E_red = zeros(n,2);
 E_red(:,1)=E(:,1);
@@ -38,16 +39,44 @@ E_red(:,2)=E(:,2);
 
 boxplot(E_red);
 
-Conso_E_bier = 0:max(E_red(:,1));
+Cons_E_beer = 0:max(Data(:,1));
+Cons_E_spir = 0:max(Data(:,2));
 
-Freq_E_bier = zeros(1, max(E_red(:,1)) + 1);
+Freq_E_beer = zeros(1, max(Data(:,1)) + 1);
+Freq_E_spir = zeros(1, max(Data(:,2)) + 1);
 
-for i=1:n
-    Freq_E_bier(1, E_red(i, 1) + 1) = Freq_E_bier(1, E_red(i, 1) + 1) + 1;
+for i = 1:n
+    Freq_E_beer(1, E(i, 1) + 1) = Freq_E_beer(1, E(i, 1) + 1) + 1;
+    Freq_E_spir(1, E(i, 2) + 1) = Freq_E_spir(1, E(i, 2) + 1) + 1;
 end
 
-Freq_E_bier = Freq_E_bier / n;
-Freq_E_bier = cumsum(Freq_E_bier);
+Freq_E_beer = Freq_E_beer / n;
+Freq_E_cum_beer = cumsum(Freq_E_beer);
+Freq_E_spir = Freq_E_spir / n;
+Freq_E_cum_spir = cumsum(Freq_E_spir);
 
-figure 
-plot(Conso_E_bier, Freq_E_bier);
+figure;
+plot(Cons_E_beer, Freq_E_cum_beer);
+plot(Cons_E_spir, Freq_E_cum_spir);
+
+
+
+
+Freq_bier = zeros(1, max(Data(:,1)) + 1);
+Freq_fort = zeros(1, max(Data(:,2)) + 1);
+
+
+for i=1:100
+    Freq_bier(1, M(i, 1) + 1) = Freq_bier(1, M(i, 1) + 1) + 1;
+    Freq_fort(1, M(i, 2) + 1) = Freq_fort(1, M(i, 2) + 1) + 1;
+end
+
+Freq_bier = Freq_bier / 100;
+Freq_cum_bier = cumsum(Freq_bier);
+Freq_fort = Freq_fort / 100;
+Freq_cum_fort = cumsum(Freq_fort);
+
+Dist_bier = abs(Freq_cum_bier - Freq_E_cum_beer);
+Dist_fort = abs(Freq_cum_fort - Freq_E_cum_spir);
+Dist_KS_bier = max(Dist_bier)
+Dist_KS_fort = max(Dist_fort)
