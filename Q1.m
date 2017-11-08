@@ -1,97 +1,142 @@
-%% Question 1
+%==========================================================================
+% Question 1 : Analyse descriptive
 %   
-%  GOFFIN Sven
-%  CRUTZEN Gilles
-%%
-M = csvread('db_stat75.csv',1,1);
-siz = size(M);
+%   GOFFIN Sven
+%   CRUTZEN Gilles
+%==========================================================================
+%% Chargement des données
 
-if(siz(1)~= 100 && siz(2)~= 4)
-    disp('ERREUR DANS LA LECTURE DU FICHIER');
+Data = csvread('db_stat75.csv',1,1);
+Data_bel = Data(1, :);
+Size = size(Data);
+N = size(Data(:,1));
+N = N(1);
+
+if(Size(1) ~= 100 || Size(2) ~= 4)
+    disp('ERREUR : LECTURE DU FICHIER ERRONEE');
 end
-%% (a) Histogramme
-% Graphique representant la frequence (repartition) des differentes
-% variables à l aide d un graphique
-% Matrice reduite en gardant que les 2 premieres colonnes
-M_red = zeros(100,2);
-M_red(:,1)=M(:,1);
-M_red(:,2)=M(:,2);
+%--------------------------------------------------------------------------
+%% (a) Histogramme de la consommation de bière et de spiritueux
 
-hist(M_red)
+Data_red = zeros(100,2);
+Data_red(:,1) = Data(:,1);
+Data_red(:,2) = Data(:,2);
 
-%% (b) Moyenne mediane mode et ecart type (biere et alcool fort)
-%Mode = valeur la plus représentée dans la densite
+hist(Data_red)
+%--------------------------------------------------------------------------
+%% (b) Moyenne, mediane, mode et ecart-type (biere et spiritueux)
 
-Moy_bier = mean(M(:,1));
-Moy_fort = mean(M(:,2));
+Moy_beer = mean(Data(:,1));
+Moy_spir = mean(Data(:,2));
 
-Med_bier = median(M(:,1));
-Med_fort = median(M(:,2));
+Med_beer = median(Data(:,1));
+Med_spir = median(Data(:,2));
 
-Mod_bier = mode(M(:,1));
-Mod_fort = mode(M(:,2));
+Mod_beer = mode(Data(:,1));
+Mod_spir = mode(Data(:,2));
 
-ET_bier = std(M(:,1));
-ET_fort = std(M(:,2));
+ET_beer = std(Data(:,1));
+ET_spir = std(Data(:,2));
+%--------------------------------------------------------------------------
+%% (c) Consommation normale
 
-%% (c) 
-Borne_inf_bier = Moy_bier - ET_bier;
-Borne_sup_bier = Moy_bier + ET_bier;
-Borne_inf_fort = Moy_fort - ET_fort;
-Borne_sup_fort = Moy_fort + ET_fort;
+Inf_bound_beer = Moy_beer - ET_beer;
+Sup_bound_beer = Moy_beer + ET_beer;
+Inf_bound_spirit = Moy_spir - ET_spir;
+Sup_bound_spirit = Moy_spir + ET_spir;
 
-Cnt_anormal_bier = 0;
-Cnt_anormal_fort = 0;
+Cnt_anormal_beer = 0;
+Cnt_anormal_spir = 0;
 
-for i = 1:100
-    if(M_red(i, 1) < Borne_inf_bier || M_red(i, 1) > Borne_sup_bier)
-        Cnt_anormal_bier = Cnt_anormal_bier + 1;
+for i = 1:N
+    if(Data(i, 1) < Inf_bound_beer || Data(i, 1) > Sup_bound_beer)
+        Cnt_anormal_beer = Cnt_anormal_beer + 1;
     end
     
-    if(M_red(i, 2) < Borne_inf_fort || M_red(i, 2) > Borne_sup_fort)
-        Cnt_anormal_fort = Cnt_anormal_fort + 1;
+    if(Data(i, 2) < Inf_bound_spirit || Data(i, 2) > Sup_bound_spirit)
+        Cnt_anormal_spir = Cnt_anormal_spir + 1;
     end
 end
 
-Prop_anormal_bier = Cnt_anormal_bier / siz(1)
-Prop_anormal_fort = Cnt_anormal_fort / siz(1)
+Prop_anormal_beer = Cnt_anormal_beer / N;
+Prop_anormal_spir = Cnt_anormal_spir / N;
+%--------------------------------------------------------------------------
+%% (d) Boites a moustaches (consommation de biere et de spiritueux)
 
-%% (d)
 figure
+boxplot(Data_red)
 
-%boxplot(M(:,1));
-%boxplot(M(:,2));
+Q1_beer = quantile(Data(:,1),0.25);
+Q3_beer = quantile(Data(:,1),0.75);
 
-%ou
+Q1_spir = quantile(Data(:,2),0.25);
+Q3_spir = quantile(Data(:,2),0.75);
 
-boxplot(M_red)
+Moust_sup_spir = Q3_spir + 1.5 * (Q3_spir - Q1_spir);
 
-Q1_bier=quantile(M(:,1),0.25);
-Q3_bier=quantile(M(:,1),0.75);
+for i = 1:N
+    if(Data(i, 2) > Moust_sup_spir)
+        Data(i, 2);
+    end
+end
+%--------------------------------------------------------------------------
+%% (e) Polygones des frequences cumulees de la consommation de biere
 
-Q1_fort=quantile(M(:,2),0.25);
-Q3_fort=quantile(M(:,2),0.75);
+Cons_beer = 0:max(Data(:,1));
+Freq_beer = zeros(1, max(Data(:,1)) + 1);
 
-Moust_sup_fort = Q3_fort +1.5*(Q3_fort-Q1_fort);
-Moust_inf_fort = 0;
+Inf_bound = 200;
+Cons_beer_bel = Data_bel(1);
+Prop_countries = 0;
 
-for i = 1:100
-    if(M_red(i, 2) > Moust_sup_fort || M_red(i, 2) < Moust_inf_fort)
-        M_red(i, 2);
+for i = 1:N
+    Freq_beer(1, Data(i, 1) + 1) = Freq_beer(1, Data(i, 1) + 1) + 1;
+    
+    if(Data(i,1) > Inf_bound && Data(i,1) < Cons_beer_bel)
+        Prop_countries = Prop_countries + 1;
     end
 end
 
-%% (e)
+Freq_beer = Freq_beer / N;
+Freq_cum_beer = cumsum(Freq_beer);
+plot(Cons_beer, Freq_cum_beer);
 
-Conso_bier = 0:max(M_red(:,1));
+Prop_countries = Prop_countries / N;
+%--------------------------------------------------------------------------
+%% (f) Scatterplots et coefficient de correlation
 
-Freq_bier = zeros(1, max(M_red(:,1)) + 1);
+Cons_pure = Data(:,4);
+Cons_beer = Data(:, 1);
+Cons_spir = Data(:, 2);
+Cons_wine = Data(:, 3);
 
-for i=1:100
-    Freq_bier(1, M_red(i, 1) + 1) = Freq_bier(1, M_red(i, 1) + 1) + 1;
+Moy_pure = mean(Data(:,4));
+Moy_wine = mean(Data(:,3));
+ET_pure = std(Data(:,4));
+ET_wine = std(Data(:,3));
+
+figure;
+scatter(Cons_pure, Cons_beer);
+title('Comparaison entre la consommation d''alcool pur et la consommation de biere');
+figure;
+scatter(Cons_pure, Cons_spir);
+title('Comparaison entre la consommation d''alcool pur et la consommation de spiritueux');
+figure;
+scatter(Cons_pure, Cons_wine);
+title('Comparaison entre la consommation d''alcool pur et la consommation de vin');
+
+
+Coef_cor_pure_beer = 0;
+Coef_cor_pure_spir = 0;
+Coef_cor_pure_wine = 0;
+
+for i = 1:N
+    Coef_cor_pure_beer = Coef_cor_pure_beer + (Cons_pure(i) - Moy_pure) * (Cons_beer(i) - Moy_beer);
+    Coef_cor_pure_spir = Coef_cor_pure_spir + (Cons_pure(i) - Moy_pure) * (Cons_spir(i) - Moy_spir);
+    Coef_cor_pure_wine = Coef_cor_pure_wine + (Cons_pure(i) - Moy_pure) * (Cons_wine(i) - Moy_wine);
 end
 
-Freq_bier = Freq_bier / 100;
-Freq_bier = cumsum(Freq_bier);
-plot(Conso_bier, Freq_bier);
-
+Coef_cor_pure_beer = Coef_cor_pure_beer / (N * ET_beer * ET_pure);
+Coef_cor_pure_spir = Coef_cor_pure_spir / (N * ET_spir * ET_pure);
+Coef_cor_pure_wine = Coef_cor_pure_wine / (N * ET_wine * ET_pure);
+%--------------------------------------------------------------------------
