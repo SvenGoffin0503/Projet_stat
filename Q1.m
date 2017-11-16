@@ -4,7 +4,7 @@
 %   GOFFIN Sven
 %   CRUTZEN Gilles
 %==========================================================================
-%% Chargement des données
+%% Chargement des donnees
 
 Data = csvread('db_stat75.csv',1,1);
 Data_bel = Data(1, :);
@@ -16,13 +16,22 @@ if(Size(1) ~= 100 || Size(2) ~= 4)
     disp('ERREUR : LECTURE DU FICHIER ERRONEE');
 end
 %--------------------------------------------------------------------------
-%% (a) Histogramme de la consommation de bière et de spiritueux
+%% (a) Histogramme de la consommation de biere et de spiritueux
 
 Data_red = zeros(100,2);
 Data_red(:,1) = Data(:,1);
 Data_red(:,2) = Data(:,2);
 
-hist(Data_red)
+figure
+histogram(Data_red(:,1),'FaceColor','b')
+hold on
+histogram(Data_red(:,2),'FaceColor','y')
+
+xlabel('Quantites consommees (canettes-shots)');
+ylabel('Frequences correspondantes');
+set(gca, 'fontsize', 20);
+set(gcf,'color','w')
+hold off
 %--------------------------------------------------------------------------
 %% (b) Moyenne, mediane, mode et ecart-type (biere et spiritueux)
 
@@ -64,7 +73,18 @@ Prop_anormal_spir = Cnt_anormal_spir / N;
 %% (d) Boites a moustaches (consommation de biere et de spiritueux)
 
 figure
-boxplot(Data_red)
+boxplot(Data_red(:,1));
+xlabel('Biere');
+ylabel('Quantites consommees (canettes)');
+set(gca, 'fontsize', 20);
+set(gcf,'color','w');
+
+figure
+boxplot(Data_red(:,2));
+xlabel('Alcool fort');
+ylabel('Quantites consommees (shots)');
+set(gca, 'fontsize', 20);
+set(gcf,'color','w');
 
 Q1_beer = quantile(Data(:,1),0.25);
 Q3_beer = quantile(Data(:,1),0.75);
@@ -99,13 +119,19 @@ end
 
 Freq_beer = Freq_beer / N;
 Freq_cum_beer = cumsum(Freq_beer);
+
+figure;
 plot(Cons_beer, Freq_cum_beer);
+xlabel('Consommation de biere (canettes)');
+ylabel('Frequences cumulees');
+set(gca, 'fontsize', 20);
+set(gcf,'color','w');
 
 Prop_countries = Prop_countries / N;
 %--------------------------------------------------------------------------
 %% (f) Scatterplots et coefficient de correlation
 
-Cons_pure = Data(:,4);
+Cons_pure = Data(: ,4);
 Cons_beer = Data(:, 1);
 Cons_spir = Data(:, 2);
 Cons_wine = Data(:, 3);
@@ -117,13 +143,25 @@ ET_wine = std(Data(:,3));
 
 figure;
 scatter(Cons_pure, Cons_beer);
-title('Comparaison entre la consommation d''alcool pur et la consommation de biere');
+%title('Comparaison entre la consommation d''alcool pur et la consommation de biere');
+xlabel('consommation d''alcool pur (litres)');
+ylabel('consommation de biere (canettes)');
+set(gca, 'fontsize', 20);
+set(gcf,'color','w');
 figure;
 scatter(Cons_pure, Cons_spir);
-title('Comparaison entre la consommation d''alcool pur et la consommation de spiritueux');
+%title('Comparaison entre la consommation d''alcool pur et la consommation de spiritueux');
+xlabel('consommation d''alcool pur (litres)');
+ylabel('consommation de spiritueux (shots)');
+set(gca, 'fontsize', 20);
+set(gcf,'color','w');
 figure;
 scatter(Cons_pure, Cons_wine);
-title('Comparaison entre la consommation d''alcool pur et la consommation de vin');
+%title('Comparaison entre la consommation d''alcool pur et la consommation de vin');
+xlabel('consommation d''alcool pur (litres)');
+ylabel('consommation de vin (verres)');
+set(gca, 'fontsize', 20);
+set(gcf,'color','w');
 
 
 Coef_cor_pure_beer = 0;
