@@ -41,6 +41,7 @@ end
 Vec_moy_E_beer;
 Vec_moy_E_spir;
 
+%--------------------------------------------------------------------------
 %% figures
 
 figure
@@ -187,5 +188,4 @@ set(gca, 'fontsize', 20);
 set(gcf,'color','w');
 xlabel('Distance de kolmogorov');
 ylabel('Frequences correspondantes');
-
 %--------------------------------------------------------------------------
