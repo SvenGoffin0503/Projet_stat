@@ -164,17 +164,7 @@ set(gca, 'fontsize', 20);
 set(gcf,'color','w');
 
 
-Coef_cor_pure_beer = 0;
-Coef_cor_pure_spir = 0;
-Coef_cor_pure_wine = 0;
-
-for i = 1:N
-    Coef_cor_pure_beer = Coef_cor_pure_beer + (Cons_pure(i) - Moy_pure) * (Cons_beer(i) - Moy_beer);
-    Coef_cor_pure_spir = Coef_cor_pure_spir + (Cons_pure(i) - Moy_pure) * (Cons_spir(i) - Moy_spir);
-    Coef_cor_pure_wine = Coef_cor_pure_wine + (Cons_pure(i) - Moy_pure) * (Cons_wine(i) - Moy_wine);
-end
-
-Coef_cor_pure_beer = Coef_cor_pure_beer / (N * ET_beer * ET_pure);
-Coef_cor_pure_spir = Coef_cor_pure_spir / (N * ET_spir * ET_pure);
-Coef_cor_pure_wine = Coef_cor_pure_wine / (N * ET_wine * ET_pure);
+Coef_cor_pure_beer = corrcoef(Cons_pure, Cons_beer);
+Coef_cor_pure_spir = corrcoef(Cons_pure, Cons_spir);
+Coef_cor_pure_wine = corrcoef(Cons_pure, Cons_wine);
 %--------------------------------------------------------------------------
