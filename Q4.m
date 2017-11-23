@@ -24,7 +24,7 @@ Table_ech = zeros(100,6,n);
 
 for i = 1:100
     for j=1:6   
-        Tir = tirage(n,Data,0); 
+        Tir = tirage(n,Data, 0); 
         Table_ech(i,j,:)= Tir(:,1);           
     end
 end
@@ -71,17 +71,18 @@ for i = 1:100
         
         Prop_ech = Prop_ech / n;
         
-        % Test de l'hypothese
+        % Test de l'hypothese pour l'etat belge
         if(Prop_ech > Upper_bound)
-            Already_rej = 1;
-            
             % Test de l'hypothese pour l'etat belge
-            if(j == 1)
+            if(j==1)
                 Rej_bel_state = Rej_bel_state + 1;
+
+            % Test de l'hypothese pour les instituts
+            else
+                Already_rej = 1;
             end
         end
     end
-    
     % L'hypothese nulle a-t-elle ete rejetee par l'etat belge ou l'un des
     % instituts de statistique?
     if(Already_rej == 1)
