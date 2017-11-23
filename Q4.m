@@ -24,7 +24,7 @@ Table_ech = zeros(100,6,n);
 
 for i = 1:100
     for j=1:6   
-        Tir = tirage(n,Data, 0); 
+        Tir = datasample(Data,n,1); 
         Table_ech(i,j,:)= Tir(:,1);           
     end
 end
