@@ -23,7 +23,7 @@ Moy_pop = mean(Data(:,3));
 Vec_ech_20 = zeros(100,n);
 
 for i = 1:100
-    Ech = tirage(n,Data,0);
+    Ech = datasample(Data,n,1);
     Vec_ech_20(i,:) = Ech(:,3);
 end
 %--------------------------------------------------------------------------
@@ -47,7 +47,7 @@ n = 50;
 Vec_ech_50 = zeros(100,n);
 
 for i = 1:100
-    Ech = tirage(n,Data,0);
+    Ech = datasample(Data,n,1);
     Vec_ech_50(i,:) = Ech(:,3);
 end
 %--------------------------------------------------------------------------
@@ -89,20 +89,3 @@ for i = 1:100
         cnt_Gauss = cnt_Gauss + 1;
     end
 end
-
-%% verif Gauss
-
-mu = mean(Data(:,3));
-sig = std(Data(:,3));
-
-cnt = 0;
-
-for i=1:100
-    
-    if(Data(i,3)>= mu-sig && Data(i,3)<= mu+sig)
-        cnt=cnt+1;
-    end
-    
-end
-cnt=cnt/100
-
