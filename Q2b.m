@@ -21,11 +21,15 @@ end
 vect_E = zeros(100,n,4);
 
 for i = 1:100
-    vect_E(i,:,:) = tirage(n,Data, 0);
+    vect_E(i,:,:) = datasample(Data,n,1);
 end
 
 Vec_moy_E_beer = zeros(100,1);
 Vec_moy_E_spir = zeros(100,1);
+Vec_med_E_beer = zeros(100,1);
+Vec_med_E_spir = zeros(100,1);
+Vec_ET_E_beer = zeros(100,1);
+Vec_ET_E_spir = zeros(100,1);
 
 for i = 1:100
     Vec_moy_E_beer(i) = mean(vect_E(i,:,1));
@@ -153,10 +157,10 @@ ks_wine = zeros(100, 1);
 ks_pure = zeros(100, 1);
 
 for i = 1:100
-    [h,p,ks_beer(i,1)] = kstest2(Freq_cum_beer_popu, Freq_E_cum_beer(i,:));
-    [h,p,ks_spir(i,1)] = kstest2(Freq_cum_spir_popu, Freq_E_cum_spir(i,:));
-    [h,p,ks_wine(i,1)] = kstest2(Freq_cum_wine_popu, Freq_E_cum_wine(i,:));
-    [h,p,ks_pure(i,1)] = kstest2(Freq_cum_pure_popu, Freq_E_cum_pure(i,:));
+    [~,~,ks_beer(i,1)] = kstest2(Freq_cum_beer_popu, Freq_E_cum_beer(i,:));
+    [~,~,ks_spir(i,1)] = kstest2(Freq_cum_spir_popu, Freq_E_cum_spir(i,:));
+    [~,~,ks_wine(i,1)] = kstest2(Freq_cum_wine_popu, Freq_E_cum_wine(i,:));
+    [~,~,ks_pure(i,1)] = kstest2(Freq_cum_pure_popu, Freq_E_cum_pure(i,:));
 end
 %--------------------------------------------------------------------------
 
