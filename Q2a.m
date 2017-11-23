@@ -18,7 +18,7 @@ end
 %--------------------------------------------------------------------------
 %% 2(a) Tirage de l'echantillon
 
-E = tirage(n, Data, 0);
+E = datasample(Data, n, 1);
 %--------------------------------------------------------------------------
 %% 2(a)i. Moyenne, mediane et ecart-type de l'echantillon (biere et spiritueux)
 
@@ -79,6 +79,6 @@ Freq_spir = Freq_spir / N;
 Freq_cum_beer = cumsum(Freq_beer);
 Freq_cum_spir = cumsum(Freq_spir);
 
-[h,p,ks_beer] = kstest2(Freq_cum_beer, Freq_E_cum_beer);
-[h,p,ks_spir] = kstest2(Freq_cum_spir, Freq_E_cum_spir);
+[~,~,ks_beer] = kstest2(Freq_cum_beer, Freq_E_cum_beer);
+[~,~,ks_spir] = kstest2(Freq_cum_spir, Freq_E_cum_spir);
 %--------------------------------------------------------------------------
