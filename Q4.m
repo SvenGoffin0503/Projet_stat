@@ -1,8 +1,8 @@
 %==========================================================================
 % Question 4 : Tests d'hypotheses
 %   
-%   GOFFIN Sven
 %   CRUTZEN Gilles
+%   GOFFIN Sven
 %==========================================================================
 %% Chargement des donnees
 
@@ -18,8 +18,8 @@ if(Size(1) ~= 100 || Size(2) ~= 4)
 end
 %--------------------------------------------------------------------------
 %% Tirage des echantillons
-% 100 * 6 tirages d'echantillons de 50 pays
 
+% 100 * 6 tirages d'echantillons de 50 pays
 Table_ech = zeros(100,6,n);
 
 for i = 1:100
@@ -31,15 +31,15 @@ end
 %--------------------------------------------------------------------------
 %% Proportion de pays consommant plus de biere que la Belgique
 
-Prop_popu = 0;
+Prop_pop = 0;
 
 for i = 1:N
     if(Data(i,1) > Cons_beer_Bel)
-        Prop_popu = Prop_popu + 1;
+        Prop_pop = Prop_pop + 1;
     end
 end
 
-Prop_popu = Prop_popu / N;
+Prop_pop = Prop_pop / N;
 %--------------------------------------------------------------------------
 %% Regle de decision : calcul de la proportion max. a ne pas depasser
 
@@ -48,15 +48,15 @@ Prop_popu = Prop_popu / N;
 % suit une loi normale de moyenne Prop_popu et d'ecart-type 
 % sqrt(Prop_popu * (1 - Prop_popu) / n)
 
-Upper_bound = 1.64486 * sqrt(Prop_popu * (1 - Prop_popu) / n) + Prop_popu;
+borne_sup = 1.64486 * sqrt(Prop_pop * (1 - Prop_pop) / n) + Prop_pop;
 %--------------------------------------------------------------------------
-%% Tests de l'hypothese
+%% 4(a), 4(b) Tests de l'hypothese
 
-Rej_bel_state = 0;
-Rej_tot = 0;
+Rej_Bel = 0;
+Rej_OMS = 0;
 
 for i = 1:100
-    Already_rej = 0;
+    Deja_rej = 0;
     
     for j = 1:6
         Prop_ech = 0;
@@ -71,24 +71,25 @@ for i = 1:100
         
         Prop_ech = Prop_ech / n;
         
-        % Test de l'hypothese pour l'etat belge
-        if(Prop_ech > Upper_bound)
-            % Test de l'hypothese pour l'etat belge
+        % Test de l'hypothese
+        if(Prop_ech > borne_sup)
+            % Rejet de l'hypothese par l'etat belge
             if(j==1)
-                Rej_bel_state = Rej_bel_state + 1;
+                Rej_Bel = Rej_Bel + 1;
 
-            % Test de l'hypothese pour les instituts
+            % Rejet de l'hypothese par les instituts de statistique
             else
-                Already_rej = 1;
+                Deja_rej = 1;
             end
         end
     end
-    % L'hypothese nulle a-t-elle ete rejetee par l'etat belge ou l'un des
-    % instituts de statistique?
-    if(Already_rej == 1)
-        Rej_tot = Rej_tot + 1;
+    % L'hypothese nulle a-t-elle ete rejetee par l'un des instituts de 
+    % statistique?
+    if(Deja_rej == 1)
+        Rej_OMS = Rej_OMS + 1;
     end
 end
 
-Prop_rej_bel_state = Rej_bel_state / 100;
-Prop_rej_tot = Rej_tot / 100;
+Prop_rej_Bel = Rej_Bel / 100;
+Prop_rej_OMS = Rej_OMS / 100;
+%--------------------------------------------------------------------------
