@@ -1,13 +1,13 @@
 %==========================================================================
 % Question 1 : Analyse descriptive
 %   
-%   GOFFIN Sven
 %   CRUTZEN Gilles
+%   GOFFIN Sven
 %==========================================================================
 %% Chargement des donnees
 
 Data = csvread('db_stat75.csv',1,1);
-Data_bel = Data(1, :);
+Data_Bel = Data(1, :);
 Size = size(Data);
 N = size(Data(:,1));
 N = N(1);
@@ -47,22 +47,22 @@ Mod_spir = mode(Data(:,2));
 ET_beer = std(Data(:,1));
 ET_spir = std(Data(:,2));
 %--------------------------------------------------------------------------
-%% (c) Consommation normale
+%% (c) Consommation normale au sens de la loi normale
 
-Inf_bound_beer = Moy_beer - ET_beer;
-Sup_bound_beer = Moy_beer + ET_beer;
-Inf_bound_spirit = Moy_spir - ET_spir;
-Sup_bound_spirit = Moy_spir + ET_spir;
+Borne_inf_beer = Moy_beer - ET_beer;
+Borne_sup_beer = Moy_beer + ET_beer;
+Borne_inf_spir = Moy_spir - ET_spir;
+Borne_sup_spir = Moy_spir + ET_spir;
 
 Cnt_anormal_beer = 0;
 Cnt_anormal_spir = 0;
 
 for i = 1:N
-    if(Data(i, 1) < Inf_bound_beer || Data(i, 1) > Sup_bound_beer)
+    if(Data(i, 1) < Borne_inf_beer || Data(i, 1) > Borne_sup_beer)
         Cnt_anormal_beer = Cnt_anormal_beer + 1;
     end
     
-    if(Data(i, 2) < Inf_bound_spirit || Data(i, 2) > Sup_bound_spirit)
+    if(Data(i, 2) < Borne_inf_spir || Data(i, 2) > Borne_sup_spir)
         Cnt_anormal_spir = Cnt_anormal_spir + 1;
     end
 end
@@ -105,15 +105,15 @@ end
 Cons_beer = 0:max(Data(:,1));
 Freq_beer = zeros(1, max(Data(:,1)) + 1);
 
-Inf_bound = 200;
-Cons_beer_bel = Data_bel(1);
-Prop_countries = 0;
+Borne_inf = 200;
+Cons_beer_Bel = Data_Bel(1);
+Prop_pays = 0;
 
 for i = 1:N
     Freq_beer(1, Data(i, 1) + 1) = Freq_beer(1, Data(i, 1) + 1) + 1;
     
-    if(Data(i,1) > Inf_bound && Data(i,1) < Cons_beer_bel)
-        Prop_countries = Prop_countries + 1;
+    if(Data(i,1) > Borne_inf && Data(i,1) < Cons_beer_Bel)
+        Prop_pays = Prop_pays + 1;
     end
 end
 
@@ -127,44 +127,46 @@ ylabel('Frequences cumulees');
 set(gca, 'fontsize', 20);
 set(gcf,'color','w');
 
-Prop_countries = Prop_countries / N;
+Prop_pays = Prop_pays / N;
 %--------------------------------------------------------------------------
-%% (f) Scatterplots et coefficient de correlation
+%% (f) Scatterplots et coefficients de correlation
 
-Cons_pure = Data(: ,4);
+Cons_pur = Data(: ,4);
 Cons_beer = Data(:, 1);
 Cons_spir = Data(:, 2);
-Cons_wine = Data(:, 3);
+Cons_vin = Data(:, 3);
 
-Moy_pure = mean(Data(:,4));
-Moy_wine = mean(Data(:,3));
-ET_pure = std(Data(:,4));
-ET_wine = std(Data(:,3));
+Moy_pur = mean(Data(:,4));
+Moy_vin = mean(Data(:,3));
+ET_pur = std(Data(:,4));
+ET_vin = std(Data(:,3));
 
+% Comparaison entre les consommations d'alcool pur et de biere
 figure;
-scatter(Cons_pure, Cons_beer);
-%title('Comparaison entre la consommation d''alcool pur et la consommation de biere');
+scatter(Cons_pur, Cons_beer);
 xlabel('consommation d''alcool pur (litres)');
 ylabel('consommation de biere (canettes)');
 set(gca, 'fontsize', 20);
 set(gcf,'color','w');
+
+% Comparaison entre les consommations d'alcool pur et de spiritueux
 figure;
-scatter(Cons_pure, Cons_spir);
-%title('Comparaison entre la consommation d''alcool pur et la consommation de spiritueux');
+scatter(Cons_pur, Cons_spir);
 xlabel('consommation d''alcool pur (litres)');
 ylabel('consommation de spiritueux (shots)');
 set(gca, 'fontsize', 20);
 set(gcf,'color','w');
+
+% Comparaison entre les consommations d'alcool pur et de vin
 figure;
-scatter(Cons_pure, Cons_wine);
-%title('Comparaison entre la consommation d''alcool pur et la consommation de vin');
+scatter(Cons_pur, Cons_vin);
 xlabel('consommation d''alcool pur (litres)');
 ylabel('consommation de vin (verres)');
 set(gca, 'fontsize', 20);
 set(gcf,'color','w');
 
-
-Coef_cor_pure_beer = corrcoef(Cons_pure, Cons_beer);
-Coef_cor_pure_spir = corrcoef(Cons_pure, Cons_spir);
-Coef_cor_pure_wine = corrcoef(Cons_pure, Cons_wine);
+% Calcul des coefficients de correlation
+Coef_cor_pur_beer = corrcoef(Cons_pur, Cons_beer);
+Coef_cor_pur_spir = corrcoef(Cons_pur, Cons_spir);
+Coef_cor_pur_vin = corrcoef(Cons_pur, Cons_vin);
 %--------------------------------------------------------------------------
