@@ -44,8 +44,8 @@ Med_spir = median(Data(:,2));
 Mod_beer = mode(Data(:,1));
 Mod_spir = mode(Data(:,2));
 
-ET_beer = std(Data(:,1));
-ET_spir = std(Data(:,2));
+ET_beer = std(Data(:,1),1);
+ET_spir = std(Data(:,2),1);
 %--------------------------------------------------------------------------
 %% (c) Consommation normale au sens de la loi normale
 
@@ -138,8 +138,8 @@ Cons_vin = Data(:, 3);
 
 Moy_pur = mean(Data(:,4));
 Moy_vin = mean(Data(:,3));
-ET_pur = std(Data(:,4));
-ET_vin = std(Data(:,3));
+ET_pur = std(Data(:,4),1);
+ET_vin = std(Data(:,3),1);
 
 % Comparaison entre les consommations d'alcool pur et de biere
 figure;
