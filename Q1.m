@@ -136,11 +136,6 @@ Cons_beer = Data(:, 1);
 Cons_spir = Data(:, 2);
 Cons_vin = Data(:, 3);
 
-Moy_pur = mean(Data(:,4));
-Moy_vin = mean(Data(:,3));
-ET_pur = std(Data(:,4),1);
-ET_vin = std(Data(:,3),1);
-
 % Comparaison entre les consommations d'alcool pur et de biere
 figure;
 scatter(Cons_pur, Cons_beer);
